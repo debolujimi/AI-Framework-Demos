@@ -1,5 +1,8 @@
 # AI Framework Demos
 
+[![Python Checks](https://github.com/debolujimi/AI-Framework-Demos/actions/workflows/python-checks.yml/badge.svg)](https://github.com/debolujimi/AI-Framework-Demos/actions/workflows/python-checks.yml)
+[![Reproducibility](https://github.com/debolujimi/AI-Framework-Demos/actions/workflows/reproducibility.yml/badge.svg)](https://github.com/debolujimi/AI-Framework-Demos/actions/workflows/reproducibility.yml)
+
 A practical teaching repository demonstrating the development, training, evaluation, inference, deployment, and use of Artificial Intelligence applications with **TensorFlow, PyTorch, and Keras**.
 
 This repository contains three end-to-end AI demonstrations covering different areas of Artificial Intelligence:
