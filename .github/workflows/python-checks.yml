@@ -1,0 +1,53 @@
+name: Python Checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  python-checks:
+    name: Python Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Show Python version
+        run: python --version
+
+      - name: Check TensorFlow demo syntax
+        run: python -m compileall -q tensorflow_demo
+
+      - name: Check PyTorch demo syntax
+        run: python -m compileall -q pytorch_demo
+
+      - name: Check Keras demo syntax
+        run: python -m compileall -q keras_demo
+
+      - name: Verify required project files
+        run: |
+          test -f README.md
+          test -f tensorflow_demo/trainModel.py
+          test -f tensorflow_demo/app.py
+          test -f pytorch_demo/trainModel.py
+          test -f pytorch_demo/runModel.py
+          test -f pytorch_demo/evaluate_model.py
+          test -f pytorch_demo/app.py
+          test -f keras_demo/trainModel.py
+          test -f keras_demo/runModel.py
+          test -f keras_demo/evaluate_model.py
+          test -f keras_demo/app.py
+
+      - name: Python checks passed
+        run: echo "All Python source checks passed successfully."
