@@ -62,3 +62,7 @@ tensorflow_demo/model_evaluation_results.json
 
 .env
 .env.*
+
+# Keras GloVe embeddings
+keras_demo/glove/
+keras_demo/glove.6B.zip

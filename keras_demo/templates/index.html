@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Keras Sentiment Analysis
+    </title>
+
+
+    <style>
+
+        body {
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            background:
+                #f4f6f8;
+
+            margin:
+                0;
+
+            padding:
+                0;
+
+        }
+
+
+        .container {
+
+            max-width:
+                750px;
+
+            margin:
+                60px auto;
+
+            background:
+                white;
+
+            padding:
+                40px;
+
+            border-radius:
+                12px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.1
+                );
+
+        }
+
+
+        h1 {
+
+            text-align:
+                center;
+
+            margin-bottom:
+                10px;
+
+        }
+
+
+        .subtitle {
+
+            text-align:
+                center;
+
+            color:
+                #666;
+
+            margin-bottom:
+                30px;
+
+        }
+
+
+        textarea {
+
+            width:
+                100%;
+
+            box-sizing:
+                border-box;
+
+            min-height:
+                150px;
+
+            padding:
+                15px;
+
+            font-size:
+                17px;
+
+            border:
+                1px solid #ccc;
+
+            border-radius:
+                8px;
+
+            resize:
+                vertical;
+
+        }
+
+
+        button {
+
+            width:
+                100%;
+
+            margin-top:
+                20px;
+
+            padding:
+                14px;
+
+            border:
+                none;
+
+            border-radius:
+                7px;
+
+            background:
+                #2563eb;
+
+            color:
+                white;
+
+            font-size:
+                17px;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        button:hover {
+
+            background:
+                #1d4ed8;
+
+        }
+
+
+        button:disabled {
+
+            background:
+                #999;
+
+            cursor:
+                not-allowed;
+
+        }
+
+
+        #status {
+
+            text-align:
+                center;
+
+            margin-top:
+                15px;
+
+            color:
+                #666;
+
+        }
+
+
+        #result {
+
+            display:
+                none;
+
+            margin-top:
+                30px;
+
+            padding:
+                25px;
+
+            border-radius:
+                8px;
+
+            background:
+                #f1f5f9;
+
+            text-align:
+                center;
+
+        }
+
+
+        .sentiment {
+
+            font-size:
+                30px;
+
+            font-weight:
+                bold;
+
+            margin:
+                15px 0;
+
+        }
+
+
+        .confidence {
+
+            font-size:
+                20px;
+
+            color:
+                #555;
+
+        }
+
+
+        .score {
+
+            margin-top:
+                10px;
+
+            color:
+                #777;
+
+            font-size:
+                14px;
+
+        }
+
+
+        .note {
+
+            margin-top:
+                30px;
+
+            padding:
+                15px;
+
+            background:
+                #f8fafc;
+
+            border-radius:
+                8px;
+
+            color:
+                #555;
+
+            font-size:
+                14px;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <h1>
+        🎬 Keras Sentiment AI
+    </h1>
+
+
+    <p class="subtitle">
+
+        Movie Review Sentiment Analysis
+        using GloVe Embeddings + LSTM
+
+    </p>
+
+
+    <textarea
+
+        id="reviewInput"
+
+        placeholder=
+        "Enter a movie review, for example: This movie was absolutely fantastic..."
+
+    ></textarea>
+
+
+    <button
+
+        id="predictButton"
+
+        onclick="predictSentiment()"
+
+    >
+
+        Analyse Sentiment
+
+    </button>
+
+
+    <p id="status"></p>
+
+
+    <div id="result">
+
+
+        <h2>
+            Sentiment Result
+        </h2>
+
+
+        <div
+
+            id="sentiment"
+
+            class="sentiment"
+
+        ></div>
+
+
+        <div
+
+            id="confidence"
+
+            class="confidence"
+
+        ></div>
+
+
+        <div
+
+            id="score"
+
+            class="score"
+
+        ></div>
+
+
+    </div>
+
+
+    <div class="note">
+
+        <strong>
+            Model information:
+        </strong>
+
+        This classifier was trained on the
+        IMDB movie-review dataset using
+        pre-trained GloVe word embeddings
+        and an LSTM neural network.
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+    async function predictSentiment() {
+
+
+        const reviewInput =
+            document.getElementById(
+                "reviewInput"
+            );
+
+
+        const predictButton =
+            document.getElementById(
+                "predictButton"
+            );
+
+
+        const status =
+            document.getElementById(
+                "status"
+            );
+
+
+        const result =
+            document.getElementById(
+                "result"
+            );
+
+
+        const sentiment =
+            document.getElementById(
+                "sentiment"
+            );
+
+
+        const confidence =
+            document.getElementById(
+                "confidence"
+            );
+
+
+        const score =
+            document.getElementById(
+                "score"
+            );
+
+
+        const review =
+            reviewInput
+            .value
+            .trim();
+
+
+        if (!review) {
+
+
+            status.textContent =
+                "Please enter a movie review.";
+
+
+            return;
+
+        }
+
+
+        predictButton.disabled =
+            true;
+
+
+        result.style.display =
+            "none";
+
+
+        status.textContent =
+            "Running Keras sentiment analysis...";
+
+
+        try {
+
+
+            const response =
+                await fetch(
+
+                    "/predict",
+
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                review:
+                                    review
+
+                            })
+
+                    }
+
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+
+                throw new Error(
+
+                    data.error
+                    ||
+                    "Prediction failed."
+
+                );
+
+            }
+
+
+            sentiment.textContent =
+                data.sentiment;
+
+
+            confidence.textContent =
+
+                "Confidence: "
+
+                +
+
+                (
+                    data.confidence
+                    * 100
+                ).toFixed(2)
+
+                +
+
+                "%";
+
+
+            score.textContent =
+
+                "Sigmoid score: "
+
+                +
+
+                data.score.toFixed(4);
+
+
+            result.style.display =
+                "block";
+
+
+            status.textContent =
+                "Sentiment analysis completed.";
+
+
+        }
+
+
+        catch (error) {
+
+
+            status.textContent =
+
+                "Error: "
+
+                +
+
+                error.message;
+
+
+        }
+
+
+        finally {
+
+
+            predictButton.disabled =
+                false;
+
+
+        }
+
+    }
+
+
+</script>
+
+
+</body>
+
+</html>
