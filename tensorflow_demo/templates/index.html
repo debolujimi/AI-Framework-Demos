@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cats vs Dogs AI Classifier</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .upload-area {
+            border: 2px dashed #aaa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            margin: 15px 0;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        #preview {
+            max-width: 300px;
+            max-height: 300px;
+            margin: 20px auto;
+            border-radius: 8px;
+            display: none;
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            display: none;
+        }
+
+        .prediction {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px;
+        }
+
+        .confidence {
+            font-size: 20px;
+            color: #555;
+        }
+
+        #status {
+            margin-top: 15px;
+            color: #666;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="container">
+
+        <h1>🐱 🐶 Cats vs Dogs AI</h1>
+
+        <p class="subtitle">
+            CNN Image Classification using TensorFlow and Flask
+        </p>
+
+
+        <div class="upload-area">
+
+            <h3>Select an image</h3>
+
+            <input
+                type="file"
+                id="imageInput"
+                accept="image/*"
+            >
+
+            <br><br>
+
+            <button
+                id="predictButton"
+                onclick="predictImage()"
+                disabled
+            >
+                Predict Image
+            </button>
+
+        </div>
+
+
+        <img
+            id="preview"
+            alt="Selected image"
+        >
+
+
+        <p id="status"></p>
+
+
+        <div id="result">
+
+            <h2>Prediction Result</h2>
+
+            <div
+                id="prediction"
+                class="prediction"
+            >
+            </div>
+
+            <div
+                id="confidence"
+                class="confidence"
+            >
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const imageInput =
+            document.getElementById("imageInput");
+
+        const preview =
+            document.getElementById("preview");
+
+        const predictButton =
+            document.getElementById("predictButton");
+
+        const status =
+            document.getElementById("status");
+
+        const result =
+            document.getElementById("result");
+
+        const prediction =
+            document.getElementById("prediction");
+
+        const confidence =
+            document.getElementById("confidence");
+
+
+        // Display selected image
+
+        imageInput.addEventListener(
+            "change",
+            function () {
+
+                const file = this.files[0];
+
+                if (!file) {
+                    predictButton.disabled = true;
+                    preview.style.display = "none";
+                    return;
+                }
+
+
+                const imageURL =
+                    URL.createObjectURL(file);
+
+                preview.src = imageURL;
+
+                preview.style.display = "block";
+
+                predictButton.disabled = false;
+
+                result.style.display = "none";
+
+                status.textContent =
+                    "Image ready for prediction.";
+
+            }
+        );
+
+
+        // Send image to Flask API
+
+        async function predictImage() {
+
+            const file =
+                imageInput.files[0];
+
+            if (!file) {
+
+                status.textContent =
+                    "Please select an image.";
+
+                return;
+            }
+
+
+            const formData =
+                new FormData();
+
+            formData.append(
+                "image",
+                file
+            );
+
+
+            predictButton.disabled = true;
+
+            status.textContent =
+                "Running AI prediction...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/predict",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Prediction failed."
+                    );
+
+                }
+
+
+                prediction.textContent =
+                    data.prediction;
+
+
+                confidence.textContent =
+                    "Confidence: " +
+                    (data.confidence * 100)
+                    .toFixed(2) +
+                    "%";
+
+
+                result.style.display =
+                    "block";
+
+
+                status.textContent =
+                    "Prediction completed.";
+
+            }
+
+
+            catch (error) {
+
+                status.textContent =
+                    "Error: " +
+                    error.message;
+
+            }
+
+
+            finally {
+
+                predictButton.disabled =
+                    false;
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>

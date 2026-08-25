@@ -1,0 +1,64 @@
+# ============================================================
+# AI FRAMEWORK DEMOS - GITIGNORE
+# ============================================================
+
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Pytest
+.pytest_cache/
+
+# VS Code / IDE
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# ============================================================
+# DATASETS
+# ============================================================
+
+# TensorFlow Cats vs Dogs dataset
+tensorflow_demo/cats_and_dogs/
+tensorflow_demo/cats_and_dogs.zip
+
+# Future datasets
+datasets/
+data/
+
+# ============================================================
+# TRAINED MODEL FILES
+# ============================================================
+
+# TensorFlow / Keras model files
+*.keras
+*.h5
+
+# PyTorch model files
+*.pt
+*.pth
+
+# ============================================================
+# GENERATED OUTPUTS
+# ============================================================
+
+tensorflow_demo/model_evaluation_results.json
+
+# Logs
+*.log
+
+# ============================================================
+# ENVIRONMENT / SECRETS
+# ============================================================
+
+.env
+.env.*

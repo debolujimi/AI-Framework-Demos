@@ -1,0 +1,7 @@
+services:
+  cats-dogs-api:
+    build: .
+    container_name: cats-dogs-compose
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
