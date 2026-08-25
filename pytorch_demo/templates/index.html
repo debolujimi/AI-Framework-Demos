@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        PyTorch English to German Translator
+    </title>
+
+
+    <style>
+
+        body {
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            background:
+                #f4f6f8;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+
+        .container {
+
+            max-width: 700px;
+
+            margin:
+                70px auto;
+
+            background:
+                white;
+
+            padding:
+                40px;
+
+            border-radius:
+                12px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.1
+                );
+
+        }
+
+
+        h1 {
+
+            text-align:
+                center;
+
+        }
+
+
+        .subtitle {
+
+            text-align:
+                center;
+
+            color:
+                #666;
+
+            margin-bottom:
+                30px;
+
+        }
+
+
+        textarea {
+
+            width:
+                100%;
+
+            box-sizing:
+                border-box;
+
+            min-height:
+                120px;
+
+            padding:
+                15px;
+
+            font-size:
+                17px;
+
+            border:
+                1px solid #ccc;
+
+            border-radius:
+                8px;
+
+            resize:
+                vertical;
+
+        }
+
+
+        button {
+
+            width:
+                100%;
+
+            margin-top:
+                20px;
+
+            padding:
+                14px;
+
+            border:
+                none;
+
+            border-radius:
+                7px;
+
+            background:
+                #2563eb;
+
+            color:
+                white;
+
+            font-size:
+                17px;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        button:hover {
+
+            background:
+                #1d4ed8;
+
+        }
+
+
+        button:disabled {
+
+            background:
+                #999;
+
+        }
+
+
+        #result {
+
+            display:
+                none;
+
+            margin-top:
+                30px;
+
+            padding:
+                20px;
+
+            background:
+                #f1f5f9;
+
+            border-radius:
+                8px;
+
+        }
+
+
+        .translation {
+
+            font-size:
+                25px;
+
+            font-weight:
+                bold;
+
+            margin-top:
+                10px;
+
+        }
+
+
+        #status {
+
+            margin-top:
+                15px;
+
+            color:
+                #666;
+
+            text-align:
+                center;
+
+        }
+
+
+        .warning {
+
+            margin-top:
+                30px;
+
+            padding:
+                15px;
+
+            background:
+                #fff7ed;
+
+            border-radius:
+                8px;
+
+            font-size:
+                14px;
+
+            color:
+                #7c2d12;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <h1>
+        🇬🇧 → 🇩🇪 PyTorch Translator
+    </h1>
+
+
+    <p class="subtitle">
+        English to German Seq2Seq Translation
+        using PyTorch and GRU
+    </p>
+
+
+    <textarea
+        id="sentenceInput"
+        placeholder="Enter an English sentence..."
+    ></textarea>
+
+
+    <button
+        id="translateButton"
+        onclick="translateSentence()"
+    >
+        Translate
+    </button>
+
+
+    <p id="status"></p>
+
+
+    <div id="result">
+
+        <h3>
+            German Translation
+        </h3>
+
+        <div
+            id="translation"
+            class="translation"
+        ></div>
+
+    </div>
+
+
+    <div class="warning">
+
+        <strong>
+            Teaching demonstration:
+        </strong>
+
+        This model was trained on only six
+        English-German sentence pairs.
+        It demonstrates the PyTorch Seq2Seq
+        architecture rather than production-quality
+        language translation.
+
+    </div>
+
+</div>
+
+
+<script>
+
+    async function translateSentence() {
+
+        const sentenceInput =
+            document.getElementById(
+                "sentenceInput"
+            );
+
+
+        const translateButton =
+            document.getElementById(
+                "translateButton"
+            );
+
+
+        const status =
+            document.getElementById(
+                "status"
+            );
+
+
+        const result =
+            document.getElementById(
+                "result"
+            );
+
+
+        const translation =
+            document.getElementById(
+                "translation"
+            );
+
+
+        const sentence =
+            sentenceInput
+            .value
+            .trim();
+
+
+        if (!sentence) {
+
+            status.textContent =
+                "Please enter an English sentence.";
+
+            return;
+
+        }
+
+
+        translateButton.disabled =
+            true;
+
+
+        status.textContent =
+            "Translating...";
+
+
+        result.style.display =
+            "none";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/translate",
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                sentence:
+                                    sentence
+
+                            })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.error
+                    ||
+                    "Translation failed."
+                );
+
+            }
+
+
+            translation.textContent =
+                data.german;
+
+
+            result.style.display =
+                "block";
+
+
+            status.textContent =
+                "Translation completed.";
+
+        }
+
+
+        catch (error) {
+
+            status.textContent =
+                "Error: "
+                +
+                error.message;
+
+        }
+
+
+        finally {
+
+            translateButton.disabled =
+                false;
+
+        }
+
+    }
+
+</script>
+
+</body>
+
+</html>
