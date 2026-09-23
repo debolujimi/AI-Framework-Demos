@@ -1647,7 +1647,9 @@ The repository can therefore be used as both a **teaching resource** and a pract
 
 # Author
 
-**Peter Olujimi**
+**Peter Olujimi**  
+AI Engineer | Agentic AI Researcher | Applied AI & ML
 
-Artificial Intelligence Engineering / Development  
-AI Training and Research
+- [GitHub](https://github.com/debolujimi)
+- [LinkedIn](https://www.linkedin.com/in/peter-olujimi-0833a2b6/)
+- [ORCID](https://orcid.org/0000-0002-9023-2328/)
