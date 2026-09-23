@@ -3,6 +3,52 @@
 [![Python Checks](https://github.com/debolujimi/AI-Framework-Demos/actions/workflows/python-checks.yml/badge.svg)](https://github.com/debolujimi/AI-Framework-Demos/actions/workflows/python-checks.yml)
 [![Reproducibility](https://github.com/debolujimi/AI-Framework-Demos/actions/workflows/reproducibility.yml/badge.svg)](https://github.com/debolujimi/AI-Framework-Demos/actions/workflows/reproducibility.yml)
 
+A practical AI engineering and teaching portfolio demonstrating model development, training, evaluation, inference, API integration, testing and deployment with **TensorFlow, PyTorch and Keras**.
+
+## Portfolio Snapshot
+
+| Framework | Problem | Architecture | Engineering surface |
+|---|---|---|---|
+| **TensorFlow** | Cats vs Dogs image classification | CNN | Training, evaluation, Flask API, browser UI, Docker, API tests |
+| **PyTorch** | English-to-German neural translation | Seq2Seq GRU | Training, evaluation, inference, Flask API, browser UI |
+| **Keras** | IMDB sentiment classification | GloVe + LSTM | Training, held-out evaluation, inference, Flask API, browser UI |
+
+### What this repository demonstrates
+
+- end-to-end AI/ML application development rather than isolated notebooks;
+- three major deep-learning frameworks across computer vision and NLP;
+- explicit model evaluation and interpretation of accuracy, precision, recall, F1-score and loss;
+- the distinction between **training memorisation and generalisation**;
+- model persistence and reusable inference code;
+- REST API and browser-interface integration;
+- Docker containerisation for the TensorFlow service;
+- automated GitHub Actions checks for Python source integrity and reproducible dependency environments.
+
+> **Evaluation note:** results in this repository are demonstration-specific. In particular, the PyTorch translator's 100% exact-match result is measured on its six training examples and is documented as memorisation, not evidence of generalisation.
+
+## Engineering Pipeline
+
+```mermaid
+flowchart LR
+    A[Problem Definition] --> B[Data Preparation]
+    B --> C[Model Architecture]
+    C --> D[Training]
+    D --> E[Evaluation]
+    E --> F[Model Persistence]
+    F --> G[Inference]
+    G --> H[REST API]
+    H --> I[Web Interface]
+    I --> J[Testing]
+    J --> K[Containerisation / Deployment]
+    K --> L[CI & Reproducibility]
+```
+
+## Technology Stack
+
+**AI/ML:** TensorFlow, Keras, PyTorch, Torchvision, NumPy, GloVe  
+**Application engineering:** Python, Flask, HTML, CSS, JavaScript, REST APIs  
+**Delivery and quality:** Docker, Docker Compose, Pytest, GitHub Actions, Git
+
 A practical teaching repository demonstrating the development, training, evaluation, inference, deployment, and use of Artificial Intelligence applications with **TensorFlow, PyTorch, and Keras**.
 
 This repository contains three end-to-end AI demonstrations covering different areas of Artificial Intelligence:
@@ -1601,7 +1647,9 @@ The repository can therefore be used as both a **teaching resource** and a pract
 
 # Author
 
-**Peter Olujimi**
+**Peter Olujimi**  
+AI Engineer | Agentic AI Researcher | Applied AI & ML
 
-Artificial Intelligence Engineering / Development  
-AI Training and Research
+- [GitHub](https://github.com/debolujimi)
+- [LinkedIn](https://www.linkedin.com/in/peter-olujimi-0833a2b6/)
+- [ORCID](https://orcid.org/0000-0002-9023-2328/)
